@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div id="container">
+        <header>
+            <a href="index.html">
+                <img id="logoImg" src="Images/logo/logo.png" alt="Logo">
+            </a>
+            <div class="title">
+                <h1>Page Title</h1>
+            </div>
+            <div class="welcome" style="font-weight: bold;">Welcome Admin!</div>
+        </header>
+        <nav>
+            <ul>
+                <li><a href="addPage.html">Add Page</a></li>
+                <li><a href="editPages.html">Edit Pages</a></li>
+                <li id="logout"><a href="logout.html">Logout</a></li>
+            </ul>
+        </nav>
+        <main>
+            <section class="addPage">
+                <h2>Add Page</h2>
+                <div class="pageHead">
+                    <label for="pagetitle">Page Title</label>
+                    <input type="text" name="pagetitle" id="pagetitle">
+                </div>
+                <div class="heroImage">
+                    <label for="pageImg">Hero Image</label>
+                    <input type="text" name="pageImg" id="pageImg">
+                    <button id="browse">Browse...</button>
+                </div>
+                <div>
+                    <textarea name="pageContent" id="" cols="60" rows="25"></textarea>
+                </div>
+                <div>
+                    <button id="submit">Submit</button>
+                </div>
+                </section>
+            
+        </main>
+        <footer>
+            <div>&copy; Copyright 2020. Conestoga College.</div>
+        </footer>  
+    </div>  
+</body>
+</html>
