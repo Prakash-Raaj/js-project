@@ -1,38 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <div id="container">
-        <header>
-            <a href="index.html">
-                <img id="logoImg" src="Images/logo/logo.png" alt="Logo">
-            </a>
-            <div class="title">
-                <h1>Page Title</h1>
-            </div>
-        </header>
-        <nav>
-            <ul>
-                <li><a href="index.html">Home</a></li>
-                <li><a href="">About</a></li>
-                <li><a href="">Team</a></li>
-                <li><a href="">Contact</a></li> 
-            </ul>
-        </nav>
+<%- include('layouts/head.ejs'); -%>
+    <body>
+        <%- include('layouts/header.ejs'); -%>
+        <div id="container">
+
+        <%- include('layouts/nav.ejs'); -%>
+        
         <main>
             <img src="Images/flowers.jpg" alt="">   
             <h2>About</h2>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia voluptatibus expedita optio eveniet quidem iste, amet, alias molestias id, suscipit inventore maiores sit quae ab at nulla ipsum nesciunt incidunt sint sapiente esse est. Optio provident at libero quas excepturi eum hic ex inventore iusto neque, natus eos eligendi laboriosam alias iure minima enim fuga error recusandae, vitae quod illum officia. Sed dignissimos dolorum quo sapiente officia, quasi eaque et asperiores tempora aliquam iure perferendis facere voluptates eum officiis accusantium mollitia amet, quod ab at maxime. Maxime debitis, ratione eos nulla et ducimus voluptate tempore quo numquam nihil ut placeat?</p>
             <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tenetur quo veritatis, voluptate at labore fugit dolor animi quibusdam totam. Dolorem reprehenderit illum fuga. Ut ullam quam nesciunt tenetur molestiae corporis distinctio voluptate porro quidem nisi quibusdam quos eius autem eum temporibus laboriosam, exercitationem quod! Doloribus, voluptates debitis vero soluta neque laborum expedita fugiat libero earum, perspiciatis a? Quas, sequi nobis?</p>
         </main>
-        <footer>
-            <div>&copy; Copyright 2020. Conestoga College.</div>
-        </footer>  
+        <%- include('layouts/footer.ejs'); -%>
     </div>  
 </body>
 </html>
