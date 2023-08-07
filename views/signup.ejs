@@ -1,0 +1,31 @@
+<%- include('layouts/head.ejs'); -%>
+    <body>
+        <div id="container">
+
+        <%- include('layouts/header.ejs'); -%>
+
+        <%- include('layouts/nav.ejs'); -%>
+        <main>
+            <form method="post" class="login">
+                <h2>Sign Up</h2>
+                <div class="loginDetail">
+                    <label for="username">Username</label>
+                    <input type="text" name="username" id="username">
+                </div>
+                <div class="loginDetail">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" >
+                </div>
+                <div class="loginDetail">
+                    <label for="repassword">Re-enter Password</label>
+                    <input type="password" name="rePassword" id="rePassword">
+                </div>
+
+                <div> <button id="submit" type="submit">Create</button>
+                </div>
+            </form>
+        </main>
+        <%- include('layouts/footer.ejs'); -%>
+    </div>  
+</body>
+</html>
