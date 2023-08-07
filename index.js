@@ -57,7 +57,7 @@ myApp.post(
     } else {
       if (password !== reEnterPassword) {
         var passErr = {
-          pasError: 'Minimum purchase should be of $10.',
+          pasError: 'Password doesnot match. Re-Enter!',
         };
         res.render('signup', passErr);
       } else {
