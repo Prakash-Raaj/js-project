@@ -78,22 +78,29 @@ myApp.post(
 myApp.post(
   '/login',
   [
-    check(
-      'username',
-      'Please enter a valid email address'
-    ).notEmpty(),
+    check('username', 'Please enter a username').notEmpty(),
     check('password', 'must have atleast 8 characters').notEmpty(),
   ],
   (req, res) => {
+    var errors = validationResult(req);
     var userData = {
       username: req.body.username,
       password: req.body.password,
     };
-
-    User.findOne(userData).then((user) => {
-      req.session.username = user.name;
-      req.session.isLoggedIn = true;
-    });
+    if (!errors.notEmpty()) {
+      var errorData = errors.array();
+      res.render('login', errorData);
+    } else {
+      User.findOne(userData)
+        .then((user) => {
+          req.session.username = user.name;
+          req.session.isLoggedIn = true;
+          res.render('adminDashboard');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 );
 

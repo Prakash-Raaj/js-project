@@ -11,10 +11,16 @@
                 <div class="loginDetail">
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username">
+                    <% if(typeof(errors) !='undefined'){%>
+                    <p><%=errors[0]%.msg></p>
+                    <%}%>
                 </div>
                 <div class="loginDetail">
                     <label for="password">Password</label>
                     <input type="text" name="password" id="password">
+                    <% if(typeof(errors) !='undefined'){%>
+                        <p><%=errors[1].msg%></p>
+                    <%}%>
                 </div>
                 <div> <button id="submit">Submit</button>
                 </div>
