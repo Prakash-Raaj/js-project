@@ -35,7 +35,10 @@ myApp.get('/signup', (req, res) => {
 myApp.post(
   '/signup',
   [
-    check('username', 'Please enter a valid email address').isEmail(),
+    check(
+      'username',
+      'Please enter a valid email address'
+    ).notEmpty(),
     check('password', 'must have atleast 8 characters').notEmpty(),
   ],
   function (req, res) {
@@ -69,6 +72,28 @@ myApp.post(
         res.render('login');
       }
     }
+  }
+);
+
+myApp.post(
+  '/login',
+  [
+    check(
+      'username',
+      'Please enter a valid email address'
+    ).notEmpty(),
+    check('password', 'must have atleast 8 characters').notEmpty(),
+  ],
+  (req, res) => {
+    var userData = {
+      username: req.body.username,
+      password: req.body.password,
+    };
+
+    User.findOne(userData).then((user) => {
+      req.session.username = user.name;
+      req.session.isLoggedIn = true;
+    });
   }
 );
 
