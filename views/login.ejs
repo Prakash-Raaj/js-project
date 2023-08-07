@@ -6,25 +6,29 @@
 
         <%- include('layouts/nav.ejs'); -%>
         <main>
-            <div class="login">
+            <form class="login" method="post">
                 <h2>Login</h2>
                 <div class="loginDetail">
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username">
                     <% if(typeof(errors) !='undefined'){%>
-                    <p><%=errors[0]%.msg%></p>
-                    <%}%>
+                        <%for(var error of errors){%>
+                            <% if(error.path == 'username'){%>
+                            <p><%=error.msg%></p>
+                            <%}}}%>
                 </div>
                 <div class="loginDetail">
                     <label for="password">Password</label>
                     <input type="text" name="password" id="password">
                     <% if(typeof(errors) !='undefined'){%>
-                        <p><%=errors[1].msg%></p>
-                    <%}%>
+                        <%for(var error of errors){%>
+                            <% if(error.path == 'password'){%>
+                            <p><%=error.msg%></p>
+                    <%}}}%>
                 </div>
                 <div> <button id="submit">Submit</button>
                 </div>
-            </div>
+            </form>
         </main>
         <%- include('layouts/footer.ejs'); -%>
     </div>  

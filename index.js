@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const { check, validationResult } = require('express-validator');
+const session = require('express-session')
 const myApp = express();
 const mongoose = require('mongoose');
 
@@ -11,6 +12,14 @@ const User = mongoose.model('User', {
   password: String,
 });
 myApp.use(express.urlencoded({ extended: false }));
+
+myApp.use(session(
+    {
+        secret:'Project',
+        resave:false,
+        saveUninitialized:true
+    }
+))
 
 // setting path to views folder
 myApp.set('views', path.join(__dirname, 'views'));
@@ -56,10 +65,14 @@ myApp.post(
       res.render('signup', formData);
     } else {
       if (password !== reEnterPassword) {
-        var passErr = {
-          pasError: 'Password doesnot match. Re-Enter!',
-        };
-        res.render('signup', passErr);
+        var pasError = {
+            errors:[
+                {
+                    msg:'Passwords dont match'
+                }
+            ]
+        }
+        res.render('signup', pasError);
       } else {
         var formData = {
           username: username,
@@ -87,15 +100,15 @@ myApp.post(
       username: req.body.username,
       password: req.body.password,
     };
-    if (!errors.notEmpty()) {
+    if (!errors.isEmpty()) {
       var errorData = errors.array();
       res.render('login', errorData);
     } else {
       User.findOne(userData)
         .then((user) => {
-          req.session.username = user.name;
-          req.session.isLoggedIn = true;
-          res.render('adminDashboard');
+            req.session.username = user.username
+            req.session.isLoggedIn = true
+            res.render('adminDashboard');
         })
         .catch((err) => {
           console.log(err);
