@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const { check, validationResult } = require('express-validator');
-const session = require('express-session')
+const session = require('express-session');
+const fileupload = require('express-fileupload');
 const myApp = express();
 const mongoose = require('mongoose');
 
@@ -11,7 +12,16 @@ const User = mongoose.model('User', {
   username: String,
   password: String,
 });
+
+const Page = mongoose.model('Page', {
+  addtitle: String,
+  addImgPath: String,
+  addDescription: String
+});
+
 myApp.use(express.urlencoded({ extended: false }));
+
+myApp.use(fileupload());
 
 myApp.use(session(
     {
@@ -28,6 +38,8 @@ myApp.set('views', path.join(__dirname, 'views'));
 myApp.use(express.static(__dirname + '/public'));
 
 myApp.set('view engine', 'ejs');
+
+const folderPath = 'public/Images/';
 
 myApp.get('/', (req, res) => {
   res.render('index');
@@ -120,6 +132,28 @@ myApp.post(
 myApp.get('/addpage', (req, res) => {
   res.render('addpage');
 });
+
+myApp.post('/addpage',(req, res) => {
+  var imageFile = req.files.pageImg;
+  var imageFileName = imageFile.name;
+  var imagePath = folderPath + imageFileName;
+  imageFile.mv(imagePath,function (err) {
+    if (err) {
+        console.log(err);
+    }
+  })
+    var addData = {
+      addtitle: req.body.pagetitle,
+      // addImgPath: '/Images/' + imageFileName,
+      addDescription: req.body.description,
+    };
+    var pageData = new Page(addData);
+    pageData.save().then(function () {
+      console.log('Page Added');
+    });
+    res.render('added');
+}
+);
 
 
 

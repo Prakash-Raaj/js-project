@@ -6,7 +6,7 @@
 
         <%- include('layouts/adminNav.ejs'); -%>
         <main>
-            <section class="addPage">
+            <form class="addPage" method="post" enctype="multipart/form-data">
                 <h2>Add Page</h2>
                 <div class="pageHead">
                     <label for="pagetitle">Page Title</label>
@@ -14,8 +14,7 @@
                 </div>
                 <div class="heroImage">
                     <label for="pageImg">Hero Image</label>
-                    <input type="text" name="pageImg" id="pageImg">
-                    <button id="browse">Browse...</button>
+                    <input type="file" name="pageImg" id="pageImg">
                 </div>
                 <div>
                     <label for="description">Description</label>
@@ -24,7 +23,7 @@
                 <div>
                     <button id="submit">Submit</button>
                 </div>
-                </section>
+                </form>
             
         </main>
         <%- include('layouts/footer.ejs'); -%>
