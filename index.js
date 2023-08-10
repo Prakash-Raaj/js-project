@@ -117,5 +117,12 @@ myApp.post(
   }
 );
 
+myApp.get('/addpage', (req, res) => {
+  res.render('addpage');
+});
+
+
+
+
 myApp.listen('8080');
 console.log('App running on port 8080');
