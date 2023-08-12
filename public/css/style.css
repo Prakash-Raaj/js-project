@@ -130,3 +130,12 @@ section h2, textarea {
     min-width: 1200px;
     margin: 120px 0px 200px 20px;
 }
+.edit-table {
+    display: flex;
+    align-items: center;
+}
+table, td, th{
+    border: 2px solid black;
+    border-collapse: collapse;
+
+}
