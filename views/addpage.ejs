@@ -17,7 +17,6 @@
                     <input type="file" name="pageImg" id="pageImg">
                 </div>
                 <div>
-                    <label for="description">Description</label>
                     <input type="text" id="description" name="description">
                 </div>
                 <div>
@@ -34,8 +33,8 @@
     <script>
         tinymce.init({
           selector: '#description',
-          height: 400,
-          menubar: true,
+          height: 300,
+          menubar: false,
           toolbar: 'undo redo | bold italic underline strikethrough | typography | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | inserttemplate addtemplate | outdent indent | numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed link anchor codesample | a11ycheck ltr rtl | showcomments addcomment | footnotes | mergetags'
   
         })

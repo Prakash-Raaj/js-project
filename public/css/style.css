@@ -17,7 +17,6 @@ header {
 }
 header h1 {
   margin-right: 110px;
-  margin-right: 50px;
 }
 #logoImg {
   width: 150px;
@@ -155,4 +154,29 @@ th {
   font-size: 20px;
   min-width: 200px;
   line-height: 40px;
+}
+.addPage {
+  margin: 30px;
+  display: flex;
+  flex-direction: column;
+}
+label {
+  font-size: 20px;
+  padding: 20px 0px;
+  line-height: 2.5;
+}
+input {
+  width: 1000px;
+  margin-left: 40px;
+  height: 25px;
+}
+button {
+  padding: 8px 45px;
+  font-size: 20px;
+  font-weight: bolder;
+  border: 2px solid black;
+  border-radius: 8px;
+  margin-top: 30px;
+  background-color: purple;
+  color: white;
 }

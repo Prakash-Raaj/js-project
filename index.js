@@ -175,64 +175,61 @@ myApp.get('/editPages', (req, res) => {
 
 myApp.get('/editpage/:pageId', (req, res) => {
   var pageId = req.params.pageId;
-  Page.findOne({_id:pageId})
+  Page.findOne({ _id: pageId })
     .then((page) => {
       // console.log('Edit page',page)
-      res.render('editpage',page);
+      res.render('editpage', page);
     })
     .catch((err) => {
       console.log(err);
     });
-
 });
 
-myApp.get('/delete/:pageId', (req,res) => {
+myApp.get('/delete/:pageId', (req, res) => {
   var pageId = req.params.pageId;
-  Page.findOneAndDelete({_id:pageId})
-  .then(function() {
-    res.render('delete');
-  })
-  .catch((err) => {
-    console.log(err);
-  });
-})
+  Page.findOneAndDelete({ _id: pageId })
+    .then(function () {
+      res.render('delete');
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
 
-myApp.post('/editpage/:pageId',(req,res)=>{
-  Page.findOne({_id:req.params.pageId})
+myApp.post('/editpage/:pageId', (req, res) => {
+  Page.findOne({ _id: req.params.pageId })
     .then((page) => {
-        console.log('check for page page',page)
-        var imagePath = page.imgPath;
-      if(req.files !== null){
+      console.log('check for page page', page);
+      var imagePath = page.imgPath;
+      if (req.files !== null) {
         var imageFile = req.files.pageImg;
         var imageFileName = imageFile.name;
         imagePath = folderPath + imageFileName;
         imageFile.mv(imagePath, function (err) {
-      if (err) {
-        console.log(err);
+          if (err) {
+            console.log(err);
+          }
+        });
       }
-    });
-    }
-  
-  var pageData = {
-    pagetitle:req.body.pagetitle,
-    imgPath:imagePath,
-    description:req.body.description
-  }
-  Page.findByIdAndUpdate(req.params.pageId,pageData).
-  then((page)=>{
-    console.log('Page updated',page);
-    res.render('edited');
-  }).catch(err=>{
-    console.log(err);
-  })
+
+      var pageData = {
+        pagetitle: req.body.pagetitle,
+        imgPath: imagePath,
+        description: req.body.description,
+      };
+      Page.findByIdAndUpdate(req.params.pageId, pageData)
+        .then((page) => {
+          console.log('Page updated', page);
+          res.render('edited');
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     })
     .catch((err) => {
       console.log(err);
     });
-
-  }
-)
-
+});
 
 myApp.listen('8080');
 console.log('App running on port 8080');
