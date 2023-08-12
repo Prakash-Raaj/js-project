@@ -6,7 +6,8 @@ const fileupload = require('express-fileupload');
 const myApp = express();
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost:27017/cmsDB');
+// mongoose.connect('mongodb://localhost:27017/cmsDB');
+mongoose.connect('mongodb://127.0.0.1:27017/cmsDB');
 
 const User = mongoose.model('User', {
   username: String,
@@ -14,22 +15,22 @@ const User = mongoose.model('User', {
 });
 
 const Page = mongoose.model('Page', {
-  addtitle: String,
-  addImgPath: String,
-  addDescription: String
+  title: String,
+  imgPath: String,
+  description: String,
 });
 
 myApp.use(express.urlencoded({ extended: false }));
 
 myApp.use(fileupload());
 
-myApp.use(session(
-    {
-        secret:'Project',
-        resave:false,
-        saveUninitialized:true
-    }
-))
+myApp.use(
+  session({
+    secret: 'Project',
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 // setting path to views folder
 myApp.set('views', path.join(__dirname, 'views'));
@@ -51,6 +52,10 @@ myApp.get('/login', (req, res) => {
 
 myApp.get('/signup', (req, res) => {
   res.render('signup');
+});
+
+myApp.get('/adminDashboard', (req, res) => {
+  res.render('adminDashboard');
 });
 
 myApp.post(
@@ -78,12 +83,12 @@ myApp.post(
     } else {
       if (password !== reEnterPassword) {
         var pasError = {
-            errors:[
-                {
-                    msg:'Passwords dont match'
-                }
-            ]
-        }
+          errors: [
+            {
+              msg: 'Passwords dont match',
+            },
+          ],
+        };
         res.render('signup', pasError);
       } else {
         var formData = {
@@ -94,7 +99,8 @@ myApp.post(
         userData.save().then(function () {
           console.log('User Created');
         });
-        res.render('login');
+        // res.render('login');
+        res.redirect('/login');
       }
     }
   }
@@ -118,9 +124,10 @@ myApp.post(
     } else {
       User.findOne(userData)
         .then((user) => {
-            req.session.username = user.username
-            req.session.isLoggedIn = true
-            res.render('adminDashboard');
+          req.session.username = user.username;
+          req.session.isLoggedIn = true;
+          // res.render('adminDashboard');
+          res.redirect('/adminDashboard');
         })
         .catch((err) => {
           console.log(err);
@@ -133,30 +140,42 @@ myApp.get('/addpage', (req, res) => {
   res.render('addpage');
 });
 
-myApp.post('/addpage',(req, res) => {
+myApp.post('/addpage', (req, res) => {
   var imageFile = req.files.pageImg;
   var imageFileName = imageFile.name;
   var imagePath = folderPath + imageFileName;
-  imageFile.mv(imagePath,function (err) {
+  imageFile.mv(imagePath, function (err) {
     if (err) {
-        console.log(err);
+      console.log(err);
     }
-  })
-    var addData = {
-      addtitle: req.body.pagetitle,
-      // addImgPath: '/Images/' + imageFileName,
-      addDescription: req.body.description,
-    };
-    var pageData = new Page(addData);
-    pageData.save().then(function () {
-      console.log('Page Added');
+  });
+  var addData = {
+    title: req.body.pagetitle,
+    imgPath: '/Images/' + imageFileName,
+    description: req.body.description,
+  };
+  var pageData = new Page(addData);
+  pageData.save().then(function () {
+    console.log('Page Added');
+  });
+  res.render('added');
+});
+
+myApp.get('/editPages', (req, res) => {
+  Page.find({})
+    .then((pages) => {
+      console.log('Pages length', pages.length);
+      console.log('The pages are', pages);
+      res.render('editPages', { pages: pages });
+    })
+    .catch((err) => {
+      console.log(err);
     });
-    res.render('added');
-}
-);
+});
 
-
-
+myApp.get('/editpage/:pageId', (req, res) => {
+  res.render('editpage');
+});
 
 
 
