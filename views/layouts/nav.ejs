@@ -1,9 +1,8 @@
 <nav>
     <ul>
-        <li><a href="/">Home</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/team">Team</a></li>
-        <li><a href="/contact">Contact</a></li> 
+        <%pages.forEach(function(page){%>
+        <li><a href="<%=page._id%>"><%= page.pagetitle %></a></li>
+        <%})%>
         <div>
             <li><a href="/login"><span style="float:right; text-decoration: underline; font-size: small;">Admin Login</span></a></li>
         </div>

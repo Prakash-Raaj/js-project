@@ -43,15 +43,31 @@ myApp.set('view engine', 'ejs');
 const folderPath = 'public/Images/';
 
 myApp.get('/', (req, res) => {
-  res.render('index');
+  Page.find({}).then(pages=>{
+    console.log('Pages:',pages);
+    res.render('index',{pages:pages,page:pages[0]});
+  }).catch(err=>{
+    console.log(err)
+  })
 });
 
+
 myApp.get('/login', (req, res) => {
-  res.render('login');
+  Page.find({}).then(pages=>{
+    console.log('Pages:',pages);
+    res.render('login',{pages:pages,page:pages[0]});
+  }).catch(err=>{
+    console.log(err)
+  })
 });
 
 myApp.get('/signup', (req, res) => {
-  res.render('signup');
+  Page.find({}).then(pages=>{
+    console.log('Pages:',pages);
+    res.render('signup',{pages:pages,page:pages[0]});
+  }).catch(err=>{
+    console.log(err)
+  })
 });
 
 myApp.get('/adminDashboard', (req, res) => {
@@ -65,7 +81,7 @@ myApp.post(
       'username',
       'Please enter a valid email address'
     ).notEmpty(),
-    check('password', 'must have atleast 8 characters').notEmpty(),
+    check('password', 'please enter valid password').notEmpty(),
   ],
   function (req, res) {
     var username = req.body.username;
@@ -77,62 +93,79 @@ myApp.post(
     console.log(errors);
 
     console.log(errors.array());
-    if (!errors.isEmpty()) {
-      var formData = { errors: errors.array() };
-      res.render('signup', formData);
-    } else {
-      if (password !== reEnterPassword) {
-        var pasError = {
-          errors: [
-            {
-              msg: 'Passwords dont match',
-            },
-          ],
-        };
-        res.render('signup', pasError);
+    Page.find({}).then(pages=>{
+      if (!errors.isEmpty()) {
+        var errorData = errors.array();
+        res.render('signup',{pages:pages,errorData:errorData});
       } else {
-        var formData = {
-          username: username,
-          password: password,
-        };
-        var userData = new User(formData);
-        userData.save().then(function () {
-          console.log('User Created');
-        });
-        // res.render('login');
-        res.redirect('/login');
+        if (password !== reEnterPassword) {
+          // var pasError = {
+          //   errors: [
+          //     {
+          //       msg: 'Passwords dont match',
+          //     },
+          //   ],
+          // };
+          var pasError = [
+            {
+              msg:'Passwords dont match'
+            }
+          ]
+          res.render('signup',{pages:pages,errorData:pasError});
+        } else {
+          var formData = {
+            username: username,
+            password: password,
+          };
+          var userData = new User(formData);
+          userData.save().then(function () {
+            console.log('User Created');
+          });
+          res.redirect('/login');
+        }
       }
-    }
+    }).catch(err=>{
+      console.log(err)
+    })
+
+    
   }
 );
+
+// Login functionality
 
 myApp.post(
   '/login',
   [
     check('username', 'Please enter a username').notEmpty(),
-    check('password', 'must have atleast 8 characters').notEmpty(),
+    check('password', 'Please enter valid password').notEmpty(),
   ],
   (req, res) => {
     var errors = validationResult(req);
+    
     var userData = {
       username: req.body.username,
       password: req.body.password,
     };
-    if (!errors.isEmpty()) {
-      var errorData = errors.array();
-      res.render('login', errorData);
-    } else {
-      User.findOne(userData)
-        .then((user) => {
-          req.session.username = user.username;
-          req.session.isLoggedIn = true;
-          // res.render('adminDashboard');
-          res.redirect('/adminDashboard');
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
+    Page.find({}).then(pages=>{
+      if (!errors.isEmpty()) {
+        var errorData = errors.array();
+      res.render('login',{pages:pages,errorData:errorData});
+      } else {
+        User.findOne(userData)
+          .then((user) => {
+            req.session.username = user.username;
+            req.session.isLoggedIn = true;
+            res.redirect('/adminDashboard');
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
+    }).catch(err=>{
+      console.log(err)
+    })
+    
   }
 );
 
@@ -229,9 +262,28 @@ myApp.post('/editpage/:pageId',(req,res)=>{
     .catch((err) => {
       console.log(err);
     });
-
   }
 )
+
+myApp.get('/logout', (req, res) => {
+  req.session.isLoggedIn = true;
+  res.redirect('/');
+})
+
+myApp.get('/:pageId',(req,res)=>{
+  Page.find({}).then(pages=>{
+    // console.log('Pages:',pages);
+    var pageId = req.params.pageId;
+    Page.findById(pageId).then(page=>{
+    res.render('index',{pages:pages,page:page});
+    }).catch(err=>{
+      console.log(err);
+    })
+  }).catch(err=>{
+    console.log(err)
+  }) 
+})
+
 
 
 myApp.listen('8080');

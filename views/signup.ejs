@@ -11,8 +11,8 @@
                 <div class="loginDetail">
                     <label for="username">Username</label>
                     <input type="text" name="username" id="username">
-                    <% if(typeof(errors) !='undefined'){%>
-                    <%for(var error of errors){%>
+                    <% if(typeof(errorData) !='undefined'){%>
+                    <%for(var error of errorData){%>
                         <% if(error.path == 'username'){%>
                         <p><%=error.msg%></p>
                         <%}}}%>
@@ -20,8 +20,8 @@
                 <div class="loginDetail">
                     <label for="password">Password</label>
                     <input type="password" name="password" id="password" >
-                    <% if(typeof(errors) !='undefined'){%>
-                        <%for(var error of errors){%>
+                    <% if(typeof(errorData) !='undefined'){%>
+                        <%for(var error of errorData){%>
                             <% if(error.path == 'password'){%>
                             <p><%=error.msg%></p>
                     <%}}}%>
@@ -29,8 +29,8 @@
                 <div class="loginDetail">
                     <label for="repassword">Re-enter Password</label>
                     <input type="password" name="rePassword" id="rePassword">
-                    <% if(typeof(errors) !='undefined'){%>
-                        <p><%=errors[0].msg%></p>
+                    <% if(typeof(errorData) !='undefined'){%>
+                        <p><%=errorData[0].msg%></p>
                     <%}%>
                 </div>
                 
