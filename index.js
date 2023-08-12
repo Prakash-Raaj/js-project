@@ -99,13 +99,6 @@ myApp.post(
         res.render('signup',{pages:pages,errorData:errorData});
       } else {
         if (password !== reEnterPassword) {
-          // var pasError = {
-          //   errors: [
-          //     {
-          //       msg: 'Passwords dont match',
-          //     },
-          //   ],
-          // };
           var pasError = [
             {
               msg:'Passwords dont match'
