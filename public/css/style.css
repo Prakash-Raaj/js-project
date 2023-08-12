@@ -16,7 +16,7 @@ header {
     text-align: center;
 }
 header h1 {
-    margin-right: 50px;
+    margin-right: 110px;
 }
 #logoImg{
     width: 150px;
@@ -63,7 +63,7 @@ footer {
     text-align: center;
     font-size: 20px;
     font-weight: bold;
-    padding: 20px;
+    padding: 20px 0px 20px 30px;
     margin: 0;
 }
 .login {
@@ -113,6 +113,14 @@ footer {
 section h2, textarea {
     min-width: 1100px;
 } 
-.create {
-
+.message {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: bolder;
+    font-size: 30px;
+    min-width: 1200px;
+    margin: 120px 0px 200px 20px;
 }

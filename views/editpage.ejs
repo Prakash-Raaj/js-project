@@ -1,0 +1,44 @@
+<%- include('layouts/head.ejs'); -%>
+    <body>
+        <div id="container">
+
+        <%- include('layouts/header.ejs'); -%>
+
+        <%- include('layouts/adminNav.ejs'); -%>
+        <main>
+            <form class="addPage" method="post" enctype="multipart/form-data">
+                <h2>Edit Page</h2>
+                <div class="pageHead">
+                    <label for="pagetitle">Page Title</label>
+                    <input type="text" name="pagetitle" id="pagetitle">
+                </div>
+                <div class="heroImage">
+                    <label for="pageImg">Hero Image</label>
+                    <input type="file" name="pageImg" id="pageImg">
+                </div>
+                <div>
+                    <label for="description">Description</label>
+                    <input type="text" id="description" name="description">
+                </div>
+                <div>
+                    <button id="submit">Submit</button>
+                </div>
+                </form>
+            
+        </main>
+        <%- include('layouts/footer.ejs'); -%>
+    </div>  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="js/tinymce/jquery.tinymce.min.js"></script>
+    <script src="js/tinymce/tinymce.min.js"></script>
+    <script>
+        tinymce.init({
+          selector: '#description',
+          height: 400,
+          menubar: true,
+          toolbar: 'undo redo | bold italic underline strikethrough | typography | fontfamily fontsize blocks | alignleft aligncenter alignright alignjustify | inserttemplate addtemplate | outdent indent | numlist bullist checklist | forecolor backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | fullscreen  preview save print | insertfile image media pageembed link anchor codesample | a11ycheck ltr rtl | showcomments addcomment | footnotes | mergetags'
+  
+        })
+      </script>
+</body>
+</html>
