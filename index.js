@@ -1,3 +1,4 @@
+//Importing the required modules
 const express = require('express');
 const path = require('path');
 const { check, validationResult } = require('express-validator');
@@ -6,24 +7,25 @@ const fileupload = require('express-fileupload');
 const myApp = express();
 const mongoose = require('mongoose');
 
-// mongoose.connect('mongodb://localhost:27017/cmsDB');
+//Connecting to MongoDB Database
 mongoose.connect('mongodb://127.0.0.1:27017/cmsDB');
 
+//Defining User model
 const User = mongoose.model('User', {
   username: String,
   password: String,
 });
 
+//Defining Page model
 const Page = mongoose.model('Page', {
   pagetitle: String,
   imgPath: String,
   description: String,
 });
 
+//Setting the middleware
 myApp.use(express.urlencoded({ extended: false }));
-
 myApp.use(fileupload());
-
 myApp.use(
   session({
     secret: 'Project',
@@ -40,8 +42,10 @@ myApp.use(express.static(__dirname + '/public'));
 
 myApp.set('view engine', 'ejs');
 
+//
 const folderPath = 'public/Images/';
 
+//Route to home page
 myApp.get('/', (req, res) => {
   Page.find({}).then(pages=>{
     console.log('Pages:',pages);
@@ -51,7 +55,7 @@ myApp.get('/', (req, res) => {
   })
 });
 
-
+//Route to Admin login page
 myApp.get('/login', (req, res) => {
   Page.find({}).then(pages=>{
     console.log('Pages:',pages);
@@ -61,6 +65,7 @@ myApp.get('/login', (req, res) => {
   })
 });
 
+//Route to Signup page
 myApp.get('/signup', (req, res) => {
   Page.find({}).then(pages=>{
     console.log('Pages:',pages);
@@ -70,10 +75,12 @@ myApp.get('/signup', (req, res) => {
   })
 });
 
+//Route to Admin Dashboard page
 myApp.get('/adminDashboard', (req, res) => {
   res.render('adminDashboard');
 });
 
+//Signup submission functionality
 myApp.post(
   '/signup',
   [
@@ -87,17 +94,17 @@ myApp.post(
     var username = req.body.username;
     var password = req.body.password;
     var reEnterPassword = req.body.rePassword;
-    // console.log(req.body);
-
+    //Validation results
     var errors = validationResult(req);
     console.log(errors);
-
+    // Handle validation errors
     console.log(errors.array());
     Page.find({}).then(pages=>{
       if (!errors.isEmpty()) {
         var errorData = errors.array();
         res.render('signup',{pages:pages,errorData:errorData});
       } else {
+        // Check password match 
         if (password !== reEnterPassword) {
           var pasError = [
             {
@@ -106,6 +113,7 @@ myApp.post(
           ]
           res.render('signup',{pages:pages,errorData:pasError});
         } else {
+          //Save user credentials
           var formData = {
             username: username,
             password: password,
@@ -120,13 +128,10 @@ myApp.post(
     }).catch(err=>{
       console.log(err)
     })
-
-    
   }
 );
 
-// Login functionality
-
+// Login submission functionality
 myApp.post(
   '/login',
   [
@@ -162,10 +167,12 @@ myApp.post(
   }
 );
 
+//Route to add pages
 myApp.get('/addpage', (req, res) => {
   res.render('addpage');
 });
 
+//add page submission functionality
 myApp.post('/addpage', (req, res) => {
   var imageFile = req.files.pageImg;
   var imageFileName = imageFile.name;
@@ -175,6 +182,7 @@ myApp.post('/addpage', (req, res) => {
       console.log(err);
     }
   });
+  //Save page data to database
   var addData = {
     pagetitle: req.body.pagetitle,
     imgPath: '/Images/' + imageFileName,
@@ -187,11 +195,11 @@ myApp.post('/addpage', (req, res) => {
   res.render('added');
 });
 
+//Route to edit page dashboard
 myApp.get('/editPages', (req, res) => {
+  //Retrieve all pages from database for editing 
   Page.find({})
     .then((pages) => {
-      // console.log('Pages length', pages.length);
-      // console.log('The pages are', pages);
       res.render('editPages', { pages: pages });
     })
     .catch((err) => {
@@ -199,11 +207,12 @@ myApp.get('/editPages', (req, res) => {
     });
 });
 
+//Route to edit one of the saved pages 
 myApp.get('/editpage/:pageId', (req, res) => {
   var pageId = req.params.pageId;
+  //Finding specific page from database for editing 
   Page.findOne({ _id: pageId })
     .then((page) => {
-      // console.log('Edit page',page)
       res.render('editpage', page);
     })
     .catch((err) => {
@@ -211,22 +220,15 @@ myApp.get('/editpage/:pageId', (req, res) => {
     });
 });
 
-myApp.get('/delete/:pageId', (req, res) => {
-  var pageId = req.params.pageId;
-  Page.findOneAndDelete({ _id: pageId })
-    .then(function () {
-      res.render('delete');
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-
+//Route to edit Specific page & its functionality
 myApp.post('/editpage/:pageId', (req, res) => {
+  // Find the page in the database to be edited
   Page.findOne({ _id: req.params.pageId })
     .then((page) => {
       console.log('check for page page', page);
+      //Use already added image 
       var imagePath = page.imgPath;
+      //Update the new image if provided
       if (req.files !== null) {
         var imageFile = req.files.pageImg;
         var imageFileName = imageFile.name;
@@ -237,12 +239,12 @@ myApp.post('/editpage/:pageId', (req, res) => {
           }
         });
       }
-
       var pageData = {
         pagetitle: req.body.pagetitle,
         imgPath: imagePath,
         description: req.body.description,
       };
+      //Update the page in the database
       Page.findByIdAndUpdate(req.params.pageId, pageData)
         .then((page) => {
           console.log('Page updated', page);
@@ -258,14 +260,35 @@ myApp.post('/editpage/:pageId', (req, res) => {
   }
 )
 
+//Route to delete & its functionality
+myApp.get('/delete/:pageId', (req, res) => {
+  var pageId = req.params.pageId;
+  // Find and delete a page in database
+  Page.findOneAndDelete({ _id: pageId })
+    .then(function () {
+      res.render('delete');
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+});
+
+
+//Route to logout
 myApp.get('/logout', (req, res) => {
   req.session.isLoggedIn = true;
-  res.redirect('/');
+  Page.find({}).then(pages=>{
+    res.render('logout',{pages:pages});
+  }).catch(err=>{
+    console.log(err)
+  }) 
+
 })
 
+//Route to template page
 myApp.get('/:pageId',(req,res)=>{
   Page.find({}).then(pages=>{
-    // console.log('Pages:',pages);
+    // Find and render a specific page by ID
     var pageId = req.params.pageId;
     Page.findById(pageId).then(page=>{
     res.render('index',{pages:pages,page:page});
@@ -278,6 +301,6 @@ myApp.get('/:pageId',(req,res)=>{
 })
 
 
-
+//Start the server
 myApp.listen('8080');
 console.log('App running on port 8080');
