@@ -222,7 +222,7 @@ myApp.get('/editpage/:pageId', (req, res) => {
 
 //Route to edit Specific page & its functionality
 myApp.post('/editpage/:pageId', (req, res) => {
-  // Find the page in the database to be edited
+  // Find the page using pageId in the database to be edited
   Page.findOne({ _id: req.params.pageId })
     .then((page) => {
       console.log('check for page page', page);
